@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/danfojs@1.0.2/lib/bundle.js"></script>
+
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div id="div1"></div>
+
+
+    <script>
+
+      dfd.readCSV("https://raw.githubusercontent.com/sclegg2/George-Eliot-Archive-Chronology/main/George_Eliot_Chronology_Final.csv")
+          .then(df => {
+
+              df.plot("div1").table() //display csv as table
+              new_df = df.setIndex({ column: "Year", drop: true }); //resets the index to Date column
+              new_df.head(5).print() //
+
+          }).catch(err => {
+              console.log(err);
+          })
+    </script>
+  </body>
+</html>
