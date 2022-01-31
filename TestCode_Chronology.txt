@@ -1,3 +1,5 @@
+CHRONOLOGY EXAMPLE
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -26,4 +28,36 @@
           })
     </script>
   </body>
+</html>
+
+
+
+
+READ_EXCEL_FILE EXAMPLE
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <script src="https://cdn.jsdelivr.net/npm/danfojs@1.0.2/lib/bundle.min.js"></script>
+     <title>Document</title>
+</head>
+
+<body>
+   <div id="div1"></div>
+    <script>
+
+        const remote_url = 'https://file-examples-com.github.io/uploads/2017/02/file_example_XLS_100.xls';
+        dfd.readExcel(remote_url).then(df => {
+              df.plot("div1").table() //display csv as table
+              new_df = df.setIndex({ column: "Library", drop: true }); //resets the index to Date column
+            new_df.head().print()
+        })
+
+         
+    </script>
+</body>
+
 </html>
