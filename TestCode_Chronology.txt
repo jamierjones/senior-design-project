@@ -22,8 +22,10 @@ CHRONOLOGY EXAMPLE
           .then(df => {
 
               df.plot("div1").table() //display csv as table
-              new_df = df.setIndex({ column: "Year", drop: true }); //resets the index to Date column
+              new_df = df.setIndex({ column: "Year", drop: true }); //resets the index to Year column
               new_df.head(5).print() //
+
+
 
           }).catch(err => {
               console.log(err);
@@ -57,7 +59,7 @@ JOURNAL EXAMPLE
 
               df.plot("div1").table() //display csv as table
 
-              new_df = df.setIndex({ column: "Date", drop: true }); //resets the index to Date column
+              new_df = df.setIndex({ column: "Book Page", drop: true }); //resets the index to Book Page column
               new_df.head().print() //
         })
 
@@ -154,4 +156,133 @@ TIMELINE EXAMPLE
 
 
 
+
+
+----------------------------
+CHRONOLOGY SORTING EXAMPLE 1
+----------------------------
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/danfojs@1.0.2/lib/bundle.js"></script>
+
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div id="div1"></div>
+
+
+    <script>
+
+      dfd.readCSV("https://raw.githubusercontent.com/sclegg2/George-Eliot-Archive-Chronology/main/George_Eliot_Chronology_Final.csv")
+          .then(df => {
+
+              df.plot("div1").table() //display csv as table
+              new_df = df.setIndex({ column: "Year", drop: true }); //resets the index to Date column
+              new_df.head(5).print() //
+
+// Selection by label
+const sub_df = df.loc({ rows: [0, 1], columns: ["Library", "Github Stars"] })
+sub_df.print()
+
+// Selection by slicing
+const slice_df = df.loc({ rows: ["0:4"], columns: ["Library", "Github Stars"] })
+slice_df.print()
+
+// Selection by query
+const query_df = df.query({ "column": "Github Stars", "is": ">", "to": 10000 })
+query_df.print()
+
+
+          }).catch(err => {
+              console.log(err);
+          })
+    </script>
+  </body>
+</html>
+
+
+
+
+
+
+----------------------------
+CHRONOLOGY SORTING EXAMPLE 2
+----------------------------
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/danfojs@1.0.2/lib/bundle.js"></script>
+
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div id="div1"></div>
+
+
+    <script>
+
+      dfd.readCSV("https://raw.githubusercontent.com/sclegg2/George-Eliot-Archive-Chronology/main/George_Eliot_Chronology_Final.csv")
+          .then(df => {
+
+
+              const new_df = df.loc({ rows: ["1867"]})
+              new_df.plot("div1").table() //display csv as table
+              
+
+          }).catch(err => {
+              console.log(err);
+          })
+    </script>
+  </body>
+</html>
+
+
+
+
+
+
+----------------------------
+CHRONOLOGY SORTING EXAMPLE 3
+----------------------------
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/danfojs@1.0.2/lib/bundle.js"></script>
+
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div id="div1"></div>
+
+
+    <script>
+
+      dfd.readCSV("https://raw.githubusercontent.com/sclegg2/George-Eliot-Archive-Chronology/main/George_Eliot_Chronology_Final.csv")
+          .then(df => {
+
+
+              const new_df = df.loc({ columns: ["Year"]})
+              new_df.plot("div1").table() //display csv as table
+              
+
+          }).catch(err => {
+              console.log(err);
+          })
+    </script>
+  </body>
+</html>
 
