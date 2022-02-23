@@ -1,0 +1,92 @@
+----------
+CHRONOLOGY
+----------
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/danfojs@1.0.2/lib/bundle.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="chronology_table"></div>
+    <script>
+      dfd.readCSV("https://raw.githubusercontent.com/sclegg2/George-Eliot-Archive-Chronology/main/George_Eliot_Chronology_Final.csv")
+          .then(df => {
+              df.plot("chronology_table").table() //display csv as table
+          })
+    </script>
+  </body>
+</html>
+
+
+-----------------
+SORTED CHRONOLOGY
+-----------------
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/danfojs@1.0.2/lib/bundle.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="sorted_chronology"></div>
+    <script>
+      dfd.readCSV("https://raw.githubusercontent.com/sclegg2/George-Eliot-Archive-Chronology/main/George_Eliot_Chronology_Final.csv")
+          .then(df => {
+              const new_df = df.loc({ rows: ["1867"]})
+              new_df.plot("sorted_chronology").table() //display csv as table              
+          })
+    </script>
+  </body>
+</html>
+
+
+--------
+TIMELINE
+--------
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Chronology Timeline</title>
+  <style type="text/css">
+    body, html {
+      font-family: sans-serif;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="chronology_timeline"></div>
+<script type="text/javascript">
+
+  var container = document.getElementById('chronology_timeline');  // DOM element where the Timeline will be attached
+  var items = new vis.DataSet([
+    {id: 1, content: "GE born as Mary Anne Evans at South Farm, Arbury, near Nuneaton, Warwickshire, daughter of Robert Evans, 'the one deep strong love I have ever known' (Letters 1: 284) and his second wife Christiana,?ne?Pearson. GE the youngest of his five surviving children: Robert (half-brother to GE, b. 1802), Frances (or Fanny, half-sister, b. 1805), Christiana (or Chrissey, b. 1814), and Isaac (b. 1816).", start: '1819-11-22'},
+
+    {id: 2, content: "Baptised at Chilvers Coton church.", start: '1819-11-29'},
+
+    {id: 3, content: "Birth of GE's twin brothers William and Thomas Evans (lived only 10 days).", start: '1821-03-16'},
+
+    {id: 4, content: "Begins first journey away from home, visiting Derbyshire and Staffordshire in the company of her father and mother.", start: '1826-05-18'},
+
+    {id: 5, content: "Two days of rioting, witnessed by GE, and subsequently influential on the composition of Felix Holt, begin at Nuneaton during the election for the North Warwickshire constituency.", start: '1832-12-21'},
+
+    {id: 6, content: "School notebook, containing essay on 'Affectation and Conceit', and story 'Edward Neville' (Haight, pp. 553?60) begun.", start: '1834-03-16'}
+
+  ]);  // Create a DataSet (allows two way data-binding) 
+
+  var options = {};// Configuration for the Timeline 
+  var timeline = new vis.Timeline(container, items, options); // Create a Timeline
+</script>
+</body>
+</html>
+
+
+
+
+
