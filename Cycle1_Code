@@ -17,10 +17,15 @@ CHRONOLOGY TABLE
   <body>
     <div id="chronology_table"></div>
     <script>
-      dfd.readCSV("https://raw.githubusercontent.com/sclegg2/George-Eliot-Archive-Chronology/main/George_Eliot_Chronology_Final.csv")
-          .then(df => {
-              df.plot("chronology_table").table() //display csv as table
-          })
+
+getText();
+
+async function getText() 
+{
+	let df = await dfd.readCSV("https://raw.githubusercontent.com/sclegg2/George-Eliot-Archive-Chronology/main/George_Eliot_Chronology_Final.csv");       
+   	df.plot("chronology_table").table(); //display csv as table
+}
+  		        
     </script>
   </body>
 </html>
