@@ -1,102 +1,153 @@
 ***************************************************************************************************************************************************
-*To test code you can copy and paste everything below to display at once or copy & paste each section(divided by header) to display one at a time.* 
+*To test code you can copy and paste everything below to display at once.* 
 ***************************************************************************************************************************************************
 
 
-----------------
-CHRONOLOGY TABLE
-----------------
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.jsdelivr.net/npm/danfojs@1.0.2/lib/bundle.js"></script>
-    <title>Document</title>
-  </head>
-  <body>
-    <div id="chronology_table"></div>
-    <script>
-
-getText();
-
-async function getText() 
-{
-	let df = await dfd.readCSV("https://raw.githubusercontent.com/sclegg2/George-Eliot-Archive-Chronology/main/George_Eliot_Chronology_Final.csv");       
-   	df.plot("chronology_table").table(); //display csv as table
-}
-  		        
-    </script>
-  </body>
-</html>
-
-
------------------
-SORTED CHRONOLOGY
------------------
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.jsdelivr.net/npm/danfojs@1.0.2/lib/bundle.js"></script>
-    <title>Document</title>
-  </head>
-  <body>
-    <div id="sorted_chronology"></div>
-    <script>
-      dfd.readCSV("https://raw.githubusercontent.com/sclegg2/George-Eliot-Archive-Chronology/main/George_Eliot_Chronology_Final.csv")
-          .then(df => {
-              const new_df = df.loc({ rows: ["1867"]})
-              new_df.plot("sorted_chronology").table() //display csv as table              
-          })
-    </script>
-  </body>
-</html>
-
-
---------
-TIMELINE
---------
-<!DOCTYPE HTML>
-<html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" type="text/css" />
+    
   <title>Chronology Timeline</title>
   <style type="text/css">
-    body, html {
+    body, html, input 
+    {
       font-family: sans-serif;
+      font-size: 12pt;
     }
+    .visualization 
+    {
+      position: absolute;
+    }
+   menu 
+   {
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin: 10px;
+      z-index: 9999;
+   }    
   </style>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" type="text/css" />
+
 </head>
+
 <body>
-<div id="chronology_timeline"></div>
-<script type="text/javascript">
+  <div id="visualization">
+    <div id="chronology_timeline">
+    </div>
+    <div class="menu">
+      <input type="button" id="zoomIn" value="Zoom in" />
+      <input type="button" id="zoomOut" value="Zoom out" />
+      <input type="button" id="moveLeft" value="Move left" />
+      <input type="button" id="moveRight" value="Move right" />
+      <input type="button" onclick="myFunction()" value="Search"><input type="text" name="lname">
+    </div> 
+  </div>
 
-  var container = document.getElementById('chronology_timeline');  // DOM element where the Timeline will be attached
-  var items = new vis.DataSet([
-    {id: 1, content: "GE born as Mary Anne Evans at South Farm, Arbury, near Nuneaton, Warwickshire, daughter of Robert Evans, 'the one deep strong love I have ever known' (Letters 1: 284) and his second wife Christiana,?ne?Pearson. GE the youngest of his five surviving children: Robert (half-brother to GE, b. 1802), Frances (or Fanny, half-sister, b. 1805), Christiana (or Chrissey, b. 1814), and Isaac (b. 1816).", start: '1819-11-22'},
 
-    {id: 2, content: "Baptised at Chilvers Coton church.", start: '1819-11-29'},
+    <script type="text/javascript">
 
-    {id: 3, content: "Birth of GE's twin brothers William and Thomas Evans (lived only 10 days).", start: '1821-03-16'},
+          var timeline
+          const timeLineObjects = [];
+          var numberOfElementsToDisplay = 250;
+          var elementPeekLength = 30;
+		  var search = false;          
+         
 
-    {id: 4, content: "Begins first journey away from home, visiting Derbyshire and Staffordshire in the company of her father and mother.", start: '1826-05-18'},
+          getText("https://georgeeliotarchive.org/api/items?collection=45");
 
-    {id: 5, content: "Two days of rioting, witnessed by GE, and subsequently influential on the composition of Felix Holt, begin at Nuneaton during the election for the North Warwickshire constituency.", start: '1832-12-21'},
 
-    {id: 6, content: "School notebook, containing essay on 'Affectation and Conceit', and story 'Edward Neville' (Haight, pp. 553?60) begun.", start: '1834-03-16'}
+          async function getText(file) 
+          {
+			//if(localStorage.getItem("GE_Chronology_timeline") == null)
+			//{
+             let myObject = await fetch(file);
+             let myText = await myObject.text();
+			 //localStorage.setItem("GE_Chronology_timeline",myText);
+			//}
+			
+			 //let timeline = localStorage.getItem("GE_Chronology_timeline");
+             let json_data = JSON.parse(myText);
+             var length = json_data.length-1;
+			 var element_display_count = length-numberOfElementsToDisplay;
 
-  ]);  // Create a DataSet (allows two way data-binding) 
+			  for(var i = length; i>(element_display_count); i--)
+              {  
+              var content = json_data[i].element_texts[5].text;
+			  var start = json_data[i].element_texts[0].text;             
+			  
+              //Create a timeLineEvent object
+			    if (search == true & content.includes("Cross"))
+			    {
+                  var object = new timeLineEvent((length+1)-i,content,start);              
+                  timeLineObjects.push(object);
+                }
+                else if (search == false)
+                {
+                  var object = new timeLineEvent((length+1)-i,content,start);  timeLineObjects.push(object);              
+                }
+              }
+    
+              var container = document.getElementById('chronology_timeline');  // DOM element where the Timeline will be attached
+              var items = new vis.DataSet(timeLineObjects);
+              var options = {maxHeight: 600,height: 300};// Configuration for the Timeline 
+              timeline = new vis.Timeline(container, items, options); // Create a Timeline
+           }
 
-  var options = {};// Configuration for the Timeline 
-  var timeline = new vis.Timeline(container, items, options); // Create a Timeline
-</script>
+
+          // Constructor function for timeLineEvent objects
+          function timeLineEvent(tle_id, tle_content, tle_start, search) 
+          {
+            let str = '';
+            let rowLength = 60
+            let lines = ((tle_content.length)/rowLength);
+ 
+            for(let i = 0; i<lines; i++)
+            {
+                var rowStart = i*rowLength;
+                var rowEnd = (i+1)*rowLength;
+                str = str + tle_content.slice(rowStart,rowEnd)+'<br>';
+            } 
+          
+            this.id = tle_id;
+            this.content = tle_content.slice(0,elementPeekLength)+'...'; //display the first [elementPeekLength] chracters in each element
+            this.start = tle_start;
+            //this.end = tle_start + "T12:00:00"; //uncomment for element to last only 24hrs
+            this.title = str;
+          }	 
+
+          
+          //Move timeline a set [percentage] to left or right. EXAMPLE: 0.1 (left) or -0.1 (right)
+          function move(percentage) 
+          {
+             var range = timeline.getWindow();
+             var interval = range.end - range.start;
+             timeline.setWindow({start: range.start.valueOf() - interval * percentage,end: range.end.valueOf() - interval * percentage,});
+          }
+
+          // attach events to the navigation buttons
+          document.getElementById("zoomIn").onclick = function () 
+          {
+             timeline.zoomIn(0.9);
+          };
+          document.getElementById("zoomOut").onclick = function () 
+          {
+             timeline.zoomOut(0.9);
+          };
+          document.getElementById("moveLeft").onclick = function () 
+          {
+             move(0.9);
+          };
+          document.getElementById("moveRight").onclick = function () 
+          {
+             move(-0.9);
+          };
+
+
+          
+    </script>
 </body>
 </html>
-
-
-
-
-
